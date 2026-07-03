@@ -3,12 +3,26 @@ const cors = require('cors');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
 
+const pool = require('./config/db.js');
+
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
+
+const connectDB = async () =>{
+  try{
+    const connection = await pool.getConnection();
+    console.log('Database connected');
+    connection.release();
+
+  }catch(error){
+    console.log('Database connection failed', error.message);
+  }
+};
+connectDB();
 
 
 app.get('/', (req, res)=>{

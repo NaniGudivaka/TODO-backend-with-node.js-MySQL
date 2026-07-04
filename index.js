@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const dotenv = require('dotenv');
 
 const pool = require('./config/db.js');
-
+const userRouter = require('./routes/userRoute.js');
 dotenv.config();
 
 const app = express();
@@ -23,6 +23,8 @@ const connectDB = async () =>{
   }
 };
 connectDB();
+
+app.use('/auth', userRouter);
 
 
 app.get('/', (req, res)=>{

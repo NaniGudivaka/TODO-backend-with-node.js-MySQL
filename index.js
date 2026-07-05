@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 
 const pool = require('./config/db.js');
 const userRouter = require('./routes/userRoute.js');
+const todoRouter = require('./routes/todoRoutes.js');
+
 dotenv.config();
 
 const app = express();
@@ -24,7 +26,13 @@ const connectDB = async () =>{
 };
 connectDB();
 
+//user login
 app.use('/auth', userRouter);
+
+//todo creation
+app.use('/user', todoRouter);
+
+
 
 
 app.get('/', (req, res)=>{

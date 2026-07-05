@@ -110,4 +110,43 @@ return res.status(200).json({
 
 });
 
+//delete route
+
+router.delete('/delete/:id', async (req, res) =>{
+
+  const {id} = req.params;
+
+  try{
+    const [todo] = await pool.query('select * from tasks where id = ?', [id]);
+
+    if(todo.length === 0){
+      return res.status(404).json({
+        success: false,
+        message: ' User not found',
+      });
+    }
+    const [result] = await pool.query(' delete from tasks where id = ?', [id]);
+
+    if(result.affectedRows === 0){
+      return res.status(404).json({
+        success: false,
+        message: 'Todo not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Todo deleted successfully',
+    });
+
+  }catch(error){
+    console.error('Server Error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server not responding',
+    });
+  }
+
+});
+
 module.exports = router;

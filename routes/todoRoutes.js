@@ -23,7 +23,7 @@ router.post('/todo', async (req, res) => {
       return res.status(404).json({
         success: false,
         message: 'User not found',
-        status: 404
+       
       });
     }
 
@@ -35,7 +35,7 @@ router.post('/todo', async (req, res) => {
     return res.status(201).json({
       success: true,
       message: 'Todo created successfully',
-      status: 201,
+     
       todoId : result.insertId
     });
 
@@ -47,10 +47,65 @@ router.post('/todo', async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Server not responding',
-      status: 500
+      
     });
 
   }
+
+
+});
+
+//update route
+
+router.put('/edit/:id', async (req, res) =>{
+
+  const {id} = req.params;
+  const {tasks, completed} = req.body;
+
+  if(tasks === undefined || completed === undefined){
+    return res.status(400).json({
+      success: false,
+      message: 'Tasks and completed are required'
+    });
+  }
+
+try{
+  const [todo] = await pool.query('select * from tasks where id = ?', [id]);
+
+if(todo.length === 0){
+  return res.status(404).json({
+    success: false,
+    message: 'Todo not found',
+    
+  });
+}
+
+const [result] = await pool.query('update tasks set tasks = ? , completed = ? where id = ?', [tasks, completed, id]);
+
+if(result.affectedRows === 0){
+  return res.status(404).json({
+    success: false,
+    message: 'Todo not found'
+  });
+}
+
+return res.status(200).json({
+  success: true,
+  message: 'Todo updated successfully',
+  
+});
+
+  
+
+}catch(error){
+  console.error('Server error:', error);
+
+  return res.status(500).json({
+    success: false,
+    message: 'Server not responding',
+    
+  })
+}
 
 
 });

@@ -42,7 +42,11 @@ router.post('/continue', async (req, res) =>{
       return res.status(201).json({
         success: true,
         message: ' User created successfully',
-        userId: result.insertId, 
+        user: {
+          id: result.insertId,
+          name,
+          email
+        },
       });
 
 

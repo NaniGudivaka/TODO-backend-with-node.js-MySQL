@@ -55,6 +55,30 @@ router.post('/todo', async (req, res) => {
 
 });
 
+//Get route
+
+router.get('/users/:user_id', async (req, res) =>{
+
+  const {user_id} = req.params;
+
+  try{
+    const [todos] = await pool.query('select * from tasks where user_id = ?', [user_id]);
+
+    return res.json({
+      success: true,
+      todos,
+    });
+
+  }catch(error){
+  console.error('Server error:', error);
+  return res.status(500).json({
+    success: false,
+    message: 'Server not responding'
+  });
+}
+
+});
+
 //update route
 
 router.put('/edit/:id', async (req, res) =>{

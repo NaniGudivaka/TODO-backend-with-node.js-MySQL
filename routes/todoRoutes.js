@@ -30,7 +30,7 @@ router.post('/todo', async (req, res) => {
     }
 
 
-    const insertQuery = `insert into tasks(user_id, tasks) values(?, ?)`;
+    const insertQuery = `insert into todos(user_id, tasks) values(?, ?)`;
 
     const [result] = await pool.query(insertQuery, [user_id, tasks]);
 
@@ -64,7 +64,7 @@ router.get('/users/:user_id', async (req, res) =>{
   const {user_id} = req.params;
 
   try{
-    const [todos] = await pool.query('select * from tasks where user_id = ?', [user_id]);
+    const [todos] = await pool.query('select * from todos where user_id = ?', [user_id]);
 
     return res.json({
       success: true,
@@ -96,7 +96,7 @@ router.put('/edit/:id', async (req, res) =>{
   }
 
 try{
-  const [todo] = await pool.query('select * from tasks where id = ?', [id]);
+  const [todo] = await pool.query('select * from todos where id = ?', [id]);
 
 if(todo.length === 0){
   return res.status(404).json({
@@ -106,7 +106,7 @@ if(todo.length === 0){
   });
 }
 
-const [result] = await pool.query('update tasks set tasks = ? , completed = ? where id = ?', [tasks, completed, id]);
+const [result] = await pool.query('update todos set tasks = ? , completed = ? where id = ?', [tasks, completed, id]);
 
 if(result.affectedRows === 0){
   return res.status(404).json({
@@ -143,7 +143,7 @@ router.delete('/delete/:id', async (req, res) =>{
   const {id} = req.params;
 
   try{
-    const [todo] = await pool.query('select * from tasks where id = ?', [id]);
+    const [todo] = await pool.query('select * from todos where id = ?', [id]);
 
     if(todo.length === 0){
       return res.status(404).json({
@@ -151,7 +151,7 @@ router.delete('/delete/:id', async (req, res) =>{
         message: ' User not found',
       });
     }
-    const [result] = await pool.query(' delete from tasks where id = ?', [id]);
+    const [result] = await pool.query(' delete from todos where id = ?', [id]);
 
     if(result.affectedRows === 0){
       return res.status(404).json({

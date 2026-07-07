@@ -3,6 +3,8 @@ const router = express.Router();
 
 const pool = require('../config/db.js');
 
+
+//Post route
 router.post('/todo', async (req, res) => {
 
   const { user_id, tasks } = req.body;

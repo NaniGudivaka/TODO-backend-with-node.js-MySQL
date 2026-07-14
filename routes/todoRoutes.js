@@ -48,7 +48,7 @@ router.post('/todo', async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: 'Server not responding',
+      message: 'Server not responding and this is from post route',
       
     });
 

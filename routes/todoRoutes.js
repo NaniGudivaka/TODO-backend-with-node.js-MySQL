@@ -12,7 +12,7 @@ router.post('/todo', async (req, res) => {
   if (!user_id || !tasks) {
     return res.status(400).json({
       success: false,
-      message: 'Userid and task are required fields'
+      message: 'Userid and tasks are required fields'
     });
   }
 
@@ -40,6 +40,13 @@ router.post('/todo', async (req, res) => {
      
       todoId : result.insertId
     });
+
+    if(tasks.length > 500){
+      return res.status(400).json({
+        success: false,
+        message: "Task must be less than 500 characters"
+      });
+    }
 
 
   } catch (error) {

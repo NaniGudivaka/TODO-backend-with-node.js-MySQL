@@ -6,7 +6,7 @@ const pool = require('../config/db.js');
 
 //Post route
 router.post('/todo', async (req, res) => {
-
+ try {
   const { user_id, tasks } = req.body;
 
   if (!user_id || !tasks) {
@@ -16,7 +16,13 @@ router.post('/todo', async (req, res) => {
     });
   }
 
-  try {
+     if(tasks.length > 500){
+      return res.status(400).json({
+        success: false,
+        message: "Task must be less than 500 characters"
+      });
+    }
+
 
     const [user] = await pool.query(
       'select id from users where id = ? ', [user_id]);
@@ -41,12 +47,6 @@ router.post('/todo', async (req, res) => {
       todoId : result.insertId
     });
 
-    if(tasks.length > 500){
-      return res.status(400).json({
-        success: false,
-        message: "Task must be less than 500 characters"
-      });
-    }
 
 
   } catch (error) {
@@ -55,7 +55,7 @@ router.post('/todo', async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: 'Server not responding and this is from post route',
+      message: 'Server not responding...',
       
     });
 

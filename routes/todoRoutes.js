@@ -113,7 +113,7 @@ if(todo.length === 0){
   });
 }
 
-const [result] = await pool.query('update todos set tasks = ? , where id = ?', [tasks, id]);
+const [result] = await pool.query('update todos set tasks = ?  where id = ?', [tasks, id]);
 
 if(result.affectedRows === 0){
   return res.status(404).json({

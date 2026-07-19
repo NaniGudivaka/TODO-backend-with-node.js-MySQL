@@ -93,12 +93,12 @@ router.get('/users/:user_id', async (req, res) =>{
 router.put('/edit/:id', async (req, res) =>{
 
   const {id} = req.params;
-  const {tasks, completed} = req.body;
+  const {tasks} = req.body;
 
-  if(tasks === undefined || completed === undefined){
+  if(!tasks){
     return res.status(400).json({
       success: false,
-      message: 'Tasks and completed are required'
+      message: 'Tasks are required'
     });
   }
 
@@ -113,7 +113,7 @@ if(todo.length === 0){
   });
 }
 
-const [result] = await pool.query('update todos set tasks = ? , completed = ? where id = ?', [tasks, completed, id]);
+const [result] = await pool.query('update todos set tasks = ? , where id = ?', [tasks, id]);
 
 if(result.affectedRows === 0){
   return res.status(404).json({
